@@ -1,4 +1,4 @@
-package test;
+package test2;
 
 import base.framework.System;
 import base.framework.Convert;
@@ -8,8 +8,8 @@ public class TestFunc{
   public static void main( String[] args ){
   	try
   	{
-  		System.println("Hello test/TestFunc");
-
+  		System.println("Hello test2/TestFunc");
+  		
   		if( args.length >= 1 )
   			System.println("args[0]=" + args[0]);
   		
