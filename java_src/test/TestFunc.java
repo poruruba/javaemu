@@ -17,7 +17,7 @@ public class TestFunc{
   		for( int i = 0 ; i < input.length ; i++ )
 	  		System.println("params[" + i+ "]=" + input[i]);
 
-  		System.setOutput(new String[]{ "World", "‚±‚ñ‚Î‚ñ‚Í" });
+  		System.setOutput(new String[]{ "World", "ã“ã‚“ã°ã‚“ã¯" });
   	}catch( Exception ex )
   	{
 		System.print( ex.toString() );
