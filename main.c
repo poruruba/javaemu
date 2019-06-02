@@ -64,6 +64,8 @@ int EMSCRIPTEN_KEEPALIVE setRomImage(unsigned char *romImage, long romSize )
 
 int EMSCRIPTEN_KEEPALIVE callStaticMain(char *className, char *param )
 {
+	FUNC_CALL();
+
 	unsigned long i;
 	debuglog("callStaticMain Called\n");
 
@@ -94,5 +96,7 @@ int EMSCRIPTEN_KEEPALIVE callStaticMain(char *className, char *param )
 	VmFree();
 	mem_dispose();
 	
+	FUNC_RETURN();
+
 	return ret;
 }

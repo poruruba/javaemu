@@ -54,7 +54,7 @@ static long file_read(const char *p_basedir, const char *p_fname, unsigned char 
 
 static unsigned char* loadClassCode_local( const char* className )
 {
-	debuglog("loadClassCode_local: %s\n", className);
+//	debuglog("loadClassCode_local: %s\n", className);
 
 	long ret;
 	long len;
@@ -70,7 +70,7 @@ static unsigned char* loadClassCode_local( const char* className )
 
 static unsigned char* loadClassCode(const char* className)
 {
-	debuglog("loadClassCode: %s\n", className);
+//	debuglog("loadClassCode: %s\n", className);
 
 	unsigned short nameSize;
 	unsigned long allSize;
