@@ -31,12 +31,18 @@ var vue_options = {
                     Module._free(g_pointer);
                     g_pointer = null;
                 }
-                g_pointer = Module._malloc(bin.length);
+                g_pointer = Module._malloc(bin.array.length);
                 Module.HEAPU8.set(bin.array, g_pointer);
-                var ret = Module.ccall('setRomImage', "number", ["number", "number"], [g_pointer, bin.length]);
+                var ret = Module.ccall('setRomImage', "number", ["number", "number"], [g_pointer, bin.array.length]);
                 console.log("setRomImage ret=" + ret);        
             };
-            reader.readAsArrayBuffer(jclasses_file.files[0]);
+            if( jclasses_file.files.length == 0 ){
+                var ret = Module.ccall('setRomImage', "number", ["number", "number"], [0, 0]);
+                console.log("setRomImage ret=" + ret);        
+                parent.jclass_list = [];
+            }else{
+                reader.readAsArrayBuffer(jclasses_file.files[0]);
+            }
         },
         start_wasm: function(){
             if( !this.class_name ){
@@ -119,7 +125,6 @@ function jar2bin(buffer){
 	
 	var ret = {
         array: array,
-        length: imageSize,
         names: []
     };
     for( var i = 0 ; i < classFiles.length ; i++ ){
@@ -145,11 +150,12 @@ function setInput(params){
     for( var i = 0 ; i < params.length ; i++ ){
         var len = Module.stringToUTF8Array(params[i], Module.HEAPU8, g_buffer + ptr, BUFFER_SIZE - ptr);
         ptr += len;
-        Module.HEAPU8.set([0], g_buffer + ptr);
+        Module.HEAPU8[g_buffer + ptr] = 0;
         ptr++;
     }
     Module.HEAPU8[g_buffer] = params.length;
 }
+
 function getOutput(){
     var num = Module.HEAPU8[g_buffer];
 
