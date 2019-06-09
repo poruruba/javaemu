@@ -87,7 +87,6 @@ int EMSCRIPTEN_KEEPALIVE callStaticMain(char *className, char *param )
 	Var retVar;
 	unsigned char retType;
 
-	debuglog("startStaticMain className=%s\n", className);
 	ret = startStaticMain(className, param, &retType, &retVar);
 	if( ret != FT_ERR_OK || retType != RET_TYPE_NONE){
 		debuglog("return = %d\n", ret);
