@@ -8,9 +8,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef WIN32
-#include <Windows.h>
-#endif
+#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 extern unsigned char *inoutBuff_ext;
 extern unsigned long inoutBuffSize_ext;
@@ -230,10 +230,14 @@ long FCSystem_sleep(Var stack[]) {
 	long millis;
 
 	millis = stack[0].intValue;
-#ifdef WIN32
-	Sleep(millis);
-#endif
-
+	if( millis >= 1000 )
+	{
+		sleep(millis / 1000);
+		usleep((millis % 1000) * 1000);
+	}else{
+		usleep(millis * 1000);
+	}
+	
 	v.obj = 0;
 
 	stack[0] = v;

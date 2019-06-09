@@ -1368,11 +1368,11 @@ long executeMethod(WClass *wclass, WClassMethod *method, Var params[], unsigned 
 	curwclass = wclass;
 	curmethod = method;
 
-	debuglog("[Call] executeMethod\n");
+	DEBUG_PRINT("[Call] executeMethod\n");
 	utf = getUtfString(wclass, wclass->classNameIndex);
-	debuglog("\tclassName: %s\n", UtfToStaticUChars(utf));
+	DEBUG_PRINT("\tclassName: %s\n", UtfToStaticUChars(utf));
 	utf = getUtfString(wclass, METH_nameIndex(method));
-	debuglog("\tmethodName: %s\n", UtfToStaticUChars(utf));
+	DEBUG_PRINT("\tmethodName: %s\n", UtfToStaticUChars(utf));
 
 
 	if (METH_isNative(curmethod)) {
@@ -1410,6 +1410,12 @@ method_invoke:
 		vmStack[vmStackPtr++].refValue = stack;
 		vmStack[vmStackPtr++].refValue = curmethod;
 		vmStack[vmStackPtr++].refValue = curwclass;
+		
+		if( numParams == 0 ){
+			// must numParams >= 1
+			VmSetFatalErrorNum(ERR_NativeErrorReturn);
+			goto fatal_error;
+		}
 
 		ret = curmethod->code.nativeFunc( stack );
 		if( ret == 0 ){

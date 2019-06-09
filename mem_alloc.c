@@ -69,10 +69,8 @@ long mem_initialize( unsigned char *mem_block, unsigned long mem_size )
 
 void *mem_alloc2( unsigned long size, unsigned short mem_id )
 {
-	unsigned char *ret = NULL;
 	HandleInfo *ptr;
 	HandleInfo info, tInfo;
-	unsigned short temp;
 
 	if( initialized == 0 )
 		return NULL;
@@ -86,36 +84,39 @@ void *mem_alloc2( unsigned long size, unsigned short mem_id )
 	do{
 		if( info.used == FLG_UNUSED && info.next >= size )
 		{
-			ret = (unsigned char*)( ptr + 1 );
-			if( info.next == size || info.next == ( size + 1 ))
+			void *ret;
+			ret = (void*)( ptr + 1 );
+			if( info.next <= ( size + 3 ))
 			{
 				info.used = FLG_USED;
 				info.id = mem_id;
 				MEM_SET_HANDLE( ptr, info );
-				break;
+			}else{
+				unsigned short temp;
+				temp = (unsigned short)( info.next - ( 1 + size ) );
+				info.next = (unsigned short)size;
+				info.used = FLG_USED;
+				MEM_SET_HANDLE( ptr, info );
+				ptr += 1 + size;
+				tInfo.next = temp;
+				tInfo.prev = (unsigned short)size;
+				tInfo.used = FLG_UNUSED;
+				tInfo.id = mem_id;
+				MEM_SET_HANDLE( ptr, tInfo );
+				ptr += 1 + temp;
+				tInfo = MEM_GET_HANDLE( ptr );
+				tInfo.prev = temp;
+				MEM_SET_HANDLE( ptr, tInfo );
 			}
-			temp = (unsigned short)( info.next - ( 1 + size ) );
-			info.next = (unsigned short)size;
-			info.used = FLG_USED;
-			MEM_SET_HANDLE( ptr, info );
-			ptr += 1 + size;
-			tInfo.next = temp;
-			tInfo.prev = (unsigned short)size;
-			tInfo.used = FLG_UNUSED;
-			tInfo.id = mem_id;
-			MEM_SET_HANDLE( ptr, tInfo );
-			ptr += 1 + temp;
-			tInfo = MEM_GET_HANDLE( ptr );
-			tInfo.prev = temp;
-			MEM_SET_HANDLE( ptr, tInfo );
-			break;
+			
+			return ret;
 		}else{
 			ptr += 1 + info.next;
 		}
 		info = MEM_GET_HANDLE( ptr );
 	}while( info.next != (unsigned short)~0 );
 
-	return ret;
+	return NULL;
 }
 
 void mem_free( const void *thePtr )
