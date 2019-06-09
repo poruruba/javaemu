@@ -16,13 +16,13 @@ extern unsigned long classRomSize_ext;
 #ifdef CLASS_FILES
 char *baseClassDir = PRECLASS_DIR;
 
-static long file_read(const char *p_basedir, const char *p_fname, unsigned char **pp_bin, long *p_size)
+static long file_read(const char *p_fname, unsigned char **pp_bin, long *p_size)
 {
 	FILE *fp;
 	long fsize;
 	char path[255];
 
-	strcpy(path, p_basedir);
+	strcpy(path, baseClassDir);
 	strcat(path, "/");
 	strcat(path, p_fname);
 	strcat(path, ".class");
@@ -60,7 +60,7 @@ static unsigned char* loadClassCode_local( const char* className )
 	long len;
 	unsigned char *p_bin;
 
-	ret = file_read(baseClassDir, className, &p_bin, &len);
+	ret = file_read(className, &p_bin, &len);
 	if( ret != FT_ERR_OK )
 		return NULL;
 
