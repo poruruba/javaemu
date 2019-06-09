@@ -31,9 +31,8 @@
     <div id="top" class="container">
         <h1>Java Emulator</h1>
 
-        <label>Jar File</label>
+        <label>Jarファイル</label>
         <input type="file" id="jclasses_file" accept=".jar" v-on:change="jclasses_read()" />
-        <button class="btn btn-sm btn-default" v-on:click="jclasses_read()">Reload</button>
         <br>
         <ul>
             <li v-for="(jclass, index) in jclass_list" v-bind:value="jclass">{{jclass}}</li>
